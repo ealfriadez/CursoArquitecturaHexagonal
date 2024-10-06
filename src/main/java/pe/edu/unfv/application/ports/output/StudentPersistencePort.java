@@ -1,14 +1,14 @@
-package pe.edu.unfv.application.ports.input;
+package pe.edu.unfv.application.ports.output;
 
 import java.util.List;
+import java.util.Optional;
 
 import pe.edu.unfv.domain.models.Student;
 
-public interface StudentInputPort {
+public interface StudentPersistencePort {
 
-	Student findById(Long id);
+	Optional<Student> findById(Long id);
 	List<Student> findAll();
 	Student save(Student student);
-	Student update(Long id, Student student);
 	void deleteById(Long id);
 }
