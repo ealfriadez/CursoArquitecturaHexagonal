@@ -1,7 +1,5 @@
 package pe.edu.unfv.infrastructure.adapters.output.persistence.models;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +27,5 @@ public class StudentEntity {
 	private String lastName;
 	private Integer age;
 	private String address;
-	private String email;
-	private LocalDate createAt;
-	private LocalDate lastUpDate;
+	private String email;	
 }

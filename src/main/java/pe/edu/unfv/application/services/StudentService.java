@@ -2,16 +2,19 @@ package pe.edu.unfv.application.services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import lombok.RequiredArgsConstructor;
 import pe.edu.unfv.application.ports.input.StudentInputPort;
 import pe.edu.unfv.application.ports.output.StudentPersistencePort;
 import pe.edu.unfv.domain.exceptions.StudentNotFoundException;
 import pe.edu.unfv.domain.models.Student;
 
+@Service
 @RequiredArgsConstructor
 public class StudentService implements StudentInputPort{
 	
-	private StudentPersistencePort persistencePort;
+	private final StudentPersistencePort persistencePort;
 
 	@Override
 	public Student findById(Long id) {		

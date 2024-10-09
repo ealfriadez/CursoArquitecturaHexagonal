@@ -1,0 +1,19 @@
+server:
+  port: 8087
+spring:
+  application:
+    name: CursoArquitecturaHexagonal  
+  jackson:
+    default-property-inclusion: NON_NULL
+  datasource:
+    url: jdbc:postgresql://dpg-cs296vd6l47c73bdonqg-a.oregon-postgres.render.com:5432/bd_arquitectura_hexagonal
+    username: bd_arquitectura_hexagonal_user
+    password: dInQL1Qy6Kh1YKtWugQ4bCBZq4dYFaGP
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
