@@ -1,5 +1,7 @@
 package pe.edu.unfv.infrastructure.adapters.input.rest;
 
+import static pe.edu.unfv.infrastructure.adapters.input.rest.models.enums.ErrorType.FUNCTIONAL;
+import static pe.edu.unfv.infrastructure.adapters.input.rest.models.enums.ErrorType.SYSTEM;
 import static pe.edu.unfv.infrastructure.utils.ErrorCatalog.INTERNAL_SERVER_ERROR;
 import static pe.edu.unfv.infrastructure.utils.ErrorCatalog.STUDENT_BAD_PARAMETERS;
 import static pe.edu.unfv.infrastructure.utils.ErrorCatalog.STUDENT_NOT_FOUND;
@@ -23,16 +25,17 @@ import pe.edu.unfv.infrastructure.adapters.input.rest.models.response.ErrorRespo
 @RestControllerAdvice
 public class GlobalControllerAdvice {
 
-	private final String ERROR_LOG_MESSAGE = "Error -> code: {}, message: {}";
+	private final String ERROR_LOG_MESSAGE = "Error -> code: {}, type: {}, message: {}";
 	
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(StudentNotFoundException.class)
 	public ErrorResponse handleStudentNotFoundException() {
 	
-		log.error(ERROR_LOG_MESSAGE, STUDENT_NOT_FOUND.getCode(), STUDENT_NOT_FOUND.getMessage());
+		log.error(ERROR_LOG_MESSAGE, STUDENT_NOT_FOUND.getCode(), FUNCTIONAL, STUDENT_NOT_FOUND.getMessage());
 		
 		return ErrorResponse.builder()
 				.code(STUDENT_NOT_FOUND.getCode())
+				.type(FUNCTIONAL)
 				.message(STUDENT_NOT_FOUND.getMessage())
 				.timestamp(LocalDate.now().toString())
 				.build();
@@ -43,10 +46,11 @@ public class GlobalControllerAdvice {
 	public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
 		BindingResult bindingResult = e.getBindingResult();
 		
-		log.error(ERROR_LOG_MESSAGE, STUDENT_BAD_PARAMETERS.getCode(), STUDENT_BAD_PARAMETERS.getMessage());
+		log.error(ERROR_LOG_MESSAGE, STUDENT_BAD_PARAMETERS.getCode(), FUNCTIONAL, STUDENT_BAD_PARAMETERS.getMessage());
 		
 		return ErrorResponse.builder()
 				.code(STUDENT_BAD_PARAMETERS.getCode())
+				.type(FUNCTIONAL)
 				.message(STUDENT_BAD_PARAMETERS.getMessage())
 				.details(bindingResult.getFieldErrors().stream()
 						//.map(fieldError -> fieldError.getDefaultMessage()) //OTRA OPCION
@@ -60,10 +64,11 @@ public class GlobalControllerAdvice {
 	@ExceptionHandler(Exception.class)
 	public ErrorResponse handleException(Exception e) {
 		
-		log.error(ERROR_LOG_MESSAGE, INTERNAL_SERVER_ERROR.getCode(), INTERNAL_SERVER_ERROR.getMessage());
+		log.error(ERROR_LOG_MESSAGE, INTERNAL_SERVER_ERROR.getCode(), SYSTEM, INTERNAL_SERVER_ERROR.getMessage());
 		
 		return ErrorResponse.builder()
 				.code(INTERNAL_SERVER_ERROR.getCode())
+				.type(SYSTEM)
 				.message(INTERNAL_SERVER_ERROR.getMessage())
 				.details(Collections.singletonList(e.getMessage()))
 				.timestamp(LocalDate.now().toString())
