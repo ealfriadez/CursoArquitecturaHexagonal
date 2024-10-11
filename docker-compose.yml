@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   postgres:
     image: postgres:16-alpine
@@ -12,10 +11,10 @@ services:
   students-service:
     build:
       context: .
-      dockerfile: Dockerfile2
+      dockerfile: Dockerfile
     image: students-service:latest
     container_name: students-service
     ports:
-      - "8080:8080"
+      - "8087:8087"
     depends_on:
       - postgres
