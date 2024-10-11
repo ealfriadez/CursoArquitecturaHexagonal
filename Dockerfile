@@ -1,13 +1,9 @@
-ARG MS_NAME=students_service
-
-FROM openjdk:17 AS build-image-stage
-
-ARG MS_NAME
-
-WORKDIR /app/${MS_NAME}
-
-
-
-
-
 FROM openjdk:17
+
+WORKDIR /app
+
+COPY ./target/CursoArquitecturaHexagonal-0.0.1-SNAPSHOT.jar .
+
+EXPOSE 8087
+
+CMD ["java", "-jar", "CursoArquitecturaHexagonal-0.0.1-SNAPSHOT.jar" ]

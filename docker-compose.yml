@@ -4,15 +4,15 @@ services:
     image: postgres:16-alpine
     container_name: postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 12345
-      POSTGRES_DB: students_db
+      POSTGRES_USER: bd_arquitectura_hexagonal_user
+      POSTGRES_PASSWORD: dInQL1Qy6Kh1YKtWugQ4bCBZq4dYFaGP
+      POSTGRES_DB: bd_arquitectura_hexagonal
     ports:
       - "5432:5432"
   students-service:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile2
     image: students-service:latest
     container_name: students-service
     ports:
