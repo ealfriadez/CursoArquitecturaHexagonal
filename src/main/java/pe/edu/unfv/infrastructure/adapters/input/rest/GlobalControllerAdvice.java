@@ -65,6 +65,9 @@ public class GlobalControllerAdvice {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(StudentEmailAlreadyExistsException.class)
 	public ErrorResponse handleStudentEmailAlreadyExistsException(StudentEmailAlreadyExistsException e) {
+		
+		log.error(ERROR_LOG_MESSAGE, STUDENT_EMAIL_ALREADY_EXISTS.getCode(), FUNCTIONAL, STUDENT_EMAIL_ALREADY_EXISTS.getMessage());
+		
 		return ErrorResponse.builder()
 				.code(STUDENT_EMAIL_ALREADY_EXISTS.getCode())
 				.type(FUNCTIONAL)
