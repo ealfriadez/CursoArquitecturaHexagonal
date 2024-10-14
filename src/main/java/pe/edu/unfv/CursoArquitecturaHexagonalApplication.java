@@ -5,11 +5,13 @@ import java.util.Arrays;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 import lombok.RequiredArgsConstructor;
 import pe.edu.unfv.infrastructure.adapters.output.persistence.models.StudentEntity;
 import pe.edu.unfv.infrastructure.adapters.output.persistence.repository.StudentJpaRepository;
 
+@EnableFeignClients
 @SpringBootApplication
 @RequiredArgsConstructor
 public class CursoArquitecturaHexagonalApplication implements CommandLineRunner{
