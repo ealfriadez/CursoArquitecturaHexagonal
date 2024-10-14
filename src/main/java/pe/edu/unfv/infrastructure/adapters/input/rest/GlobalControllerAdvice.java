@@ -4,6 +4,7 @@ import static pe.edu.unfv.infrastructure.adapters.input.rest.models.enums.ErrorT
 import static pe.edu.unfv.infrastructure.adapters.input.rest.models.enums.ErrorType.SYSTEM;
 import static pe.edu.unfv.infrastructure.utils.ErrorCatalog.INTERNAL_SERVER_ERROR;
 import static pe.edu.unfv.infrastructure.utils.ErrorCatalog.STUDENT_BAD_PARAMETERS;
+import static pe.edu.unfv.infrastructure.utils.ErrorCatalog.STUDENT_EMAIL_ALREADY_EXISTS;
 import static pe.edu.unfv.infrastructure.utils.ErrorCatalog.STUDENT_NOT_FOUND;
 
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import lombok.extern.slf4j.Slf4j;
+import pe.edu.unfv.domain.exceptions.StudentEmailAlreadyExistsException;
 import pe.edu.unfv.domain.exceptions.StudentNotFoundException;
 import pe.edu.unfv.infrastructure.adapters.input.rest.models.response.ErrorResponse;
 
@@ -56,6 +58,18 @@ public class GlobalControllerAdvice {
 						//.map(fieldError -> fieldError.getDefaultMessage()) //OTRA OPCION
 						.map(DefaultMessageSourceResolvable::getDefaultMessage)
 						.toList())
+				.timestamp(LocalDate.now().toString())
+				.build();
+	}
+	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(StudentEmailAlreadyExistsException.class)
+	public ErrorResponse handleStudentEmailAlreadyExistsException(StudentEmailAlreadyExistsException e) {
+		return ErrorResponse.builder()
+				.code(STUDENT_EMAIL_ALREADY_EXISTS.getCode())
+				.type(FUNCTIONAL)
+				.message(STUDENT_EMAIL_ALREADY_EXISTS.getMessage())
+				.details(Collections.singletonList(e.getMessage()))
 				.timestamp(LocalDate.now().toString())
 				.build();
 	}

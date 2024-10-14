@@ -6,4 +6,5 @@ import pe.edu.unfv.infrastructure.adapters.output.persistence.models.StudentEnti
 
 public interface StudentJpaRepository extends CrudRepository<StudentEntity, Long>{
 
+	boolean existsByEmailIgnoreCase(String email);
 }
