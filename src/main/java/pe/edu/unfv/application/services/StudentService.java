@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import pe.edu.unfv.application.ports.input.StudentInputPort;
+import pe.edu.unfv.application.ports.output.ExternalCoursesOutputPort;
 import pe.edu.unfv.application.ports.output.StudentPersistencePort;
 import pe.edu.unfv.domain.exceptions.StudentEmailAlreadyExistsException;
 import pe.edu.unfv.domain.exceptions.StudentNotFoundException;
@@ -16,6 +17,7 @@ import pe.edu.unfv.domain.models.Student;
 public class StudentService implements StudentInputPort{
 	
 	private final StudentPersistencePort persistencePort;
+	private final ExternalCoursesOutputPort coursesOutputPort;
 
 	@Override
 	public Student findById(Long id) {		
@@ -59,6 +61,7 @@ public class StudentService implements StudentInputPort{
 		}
 		
 		persistencePort.deleteById(id);
+		coursesOutputPort.removeStudentFromCollection(id);
 	}
 
 	@Override

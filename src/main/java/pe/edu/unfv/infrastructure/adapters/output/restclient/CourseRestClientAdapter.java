@@ -13,8 +13,7 @@ public class CourseRestClientAdapter implements ExternalCoursesOutputPort{
 	private final CourseFeignClient feignClient;
 	
 	@Override
-	public void removeStudentFromCollection(Long studentId) {
-	
-		feignClient.remove
+	public void removeStudentFromCollection(Long studentId) {	
+		feignClient.removeStudentFromCollection(studentId);
 	}
 }
