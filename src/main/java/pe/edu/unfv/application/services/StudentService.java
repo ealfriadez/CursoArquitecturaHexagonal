@@ -3,6 +3,7 @@ package pe.edu.unfv.application.services;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import pe.edu.unfv.application.ports.input.StudentInputPort;
@@ -12,6 +13,7 @@ import pe.edu.unfv.domain.exceptions.StudentEmailAlreadyExistsException;
 import pe.edu.unfv.domain.exceptions.StudentNotFoundException;
 import pe.edu.unfv.domain.models.Student;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class StudentService implements StudentInputPort{
