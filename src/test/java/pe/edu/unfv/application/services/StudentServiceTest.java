@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -135,7 +134,7 @@ class StudentServiceTest {
 	}
 
 	@Test
-	void testSave_Faild() {
+	void testSave_faild() {
 
 		// Inicializacion
 		Student studentToSave = Student.builder().id(1L).firstName("Pepito").lastName("Dos Palotes").age(15)
@@ -150,51 +149,97 @@ class StudentServiceTest {
 		verify(studentPersistencePort, times(1)).existsByEmail("pepito@gmail.com");
 		verify(studentPersistencePort, times(0)).save(studentToSave);
 	}
-	
+
 	@Test
 	void testUpdate_Success() {
 
 		// Inicializacion
-		Student studentToUpdate = Student.builder().id(1L).firstName("Pepito1").lastName("Dos Palotes1").age(15)
+		Student studentToUpdate = Student.builder().firstName("Pepito1").lastName("Dos Palotes1").age(15)
 				.email("pepito1@gmail.com").address("Clle. 11").build();
 
 		when(studentPersistencePort.existsByEmail(anyString())).thenReturn(Boolean.FALSE);
-		when(studentPersistencePort.findById(anyLong())).thenReturn(Optional.of(TestUtils.buildStudent()));
+		when(studentPersistencePort.findById(anyLong())).thenReturn(Optional.of(studentToUpdate));
+		when(studentPersistencePort.save(any(Student.class))).thenReturn(studentToUpdate);
 
 		// Evaluacion del comportamiento
 		Student respuesta = studentService.update(1L, studentToUpdate);
-		
+
 		// Comprobaciones o aserciones
-				assertNotNull(respuesta);
-				assertEquals(1L, respuesta.getId());
-				assertEquals("Pepito", respuesta.getFirstName());
-				assertEquals("Dos Palotes", respuesta.getLastName());
-				assertEquals(15, respuesta.getAge());
-				assertEquals("pepito@gmail.com", respuesta.getEmail());
-				assertEquals("Clle. 1", respuesta.getAddress());
-				verify(studentPersistencePort, times(1)).existsByEmail("pepito@gmail.com");
-				//verify(studentPersistencePort, times(1)).save(studentToSave);
+		assertNotNull(respuesta);
+		assertEquals("Pepito1", respuesta.getFirstName());
+		assertEquals("Dos Palotes1", respuesta.getLastName());
+		assertEquals(15, respuesta.getAge());
+		assertEquals("pepito1@gmail.com", respuesta.getEmail());
+		assertEquals("Clle. 11", respuesta.getAddress());
+		verify(studentPersistencePort, times(1)).existsByEmail("pepito1@gmail.com");
+		verify(studentPersistencePort, times(1)).findById(1L);
+		verify(studentPersistencePort, times(1)).save(studentToUpdate);
 	}
 
 	@Test
-	void testUpdate_Fail() {
+	void testUpdate_findById_false() {
 
 		// Inicializacion
-		Student studentToUpdate = Student.builder().id(1L).firstName("Pepito").lastName("Dos Palotes").age(15)
-				.email("pepito@gmail.com").address("Clle. 1").build();
+		Student studentToUpdate = Student.builder().firstName("Pepito1").lastName("Dos Palotes1").age(15)
+				.email("pepito1@gmail.com").address("Clle. 11").build();
+
+		when(studentPersistencePort.existsByEmail(anyString())).thenReturn(Boolean.FALSE);
+		when(studentPersistencePort.findById(anyLong())).thenReturn(Optional.empty());
+
+		// Comprobaciones o aserciones
+		assertThrows(StudentNotFoundException.class, () -> {
+			studentService.update(15L, studentToUpdate);
+		});
+		verify(studentPersistencePort, times(1)).existsByEmail("pepito1@gmail.com");
+		verify(studentPersistencePort, times(1)).findById(15L);
+		verify(studentPersistencePort, times(0)).save(TestUtils.buildStudent());
+	}
+
+	@Test
+	void testUpdate_fail() {
+		// Inicializacion
+		Student studentToUpdate = Student.builder().firstName("Pepito1").lastName("Dos Palotes1").age(15)
+				.email("pepito@gmail.com").address("Clle. 11").build();
 
 		when(studentPersistencePort.existsByEmail(anyString())).thenReturn(Boolean.TRUE);
 
 		// Comprobaciones o aserciones
 		assertThrows(StudentEmailAlreadyExistsException.class, () -> {
-			studentService.save(studentToUpdate);
+			studentService.update(1L, studentToUpdate);
 		});
 		verify(studentPersistencePort, times(1)).existsByEmail("pepito@gmail.com");
-		verify(studentPersistencePort, times(0)).save(studentToUpdate);
+		verify(studentPersistencePort, times(0)).findById(1L);
+		verify(studentPersistencePort, times(0)).save(TestUtils.buildStudent());
 	}
 
 	@Test
-	void testDeleteById() {
-		fail("Not yet implemented");
+	void testDeleteById_success() {
+
+		// Inicializacion
+		when(studentPersistencePort.findById(anyLong())).thenReturn(Optional.of(TestUtils.buildStudent()));
+
+		// Evaluacion del comportamiento
+		studentService.deleteById(1L);
+
+		// Comprobaciones o aserciones		
+		verify(studentPersistencePort, times(1)).findById(1L);
+		verify(externalCoursesOutputPort, times(1)).removeStudentFromCollection(1L);
+
+	}
+
+	@Test
+	void testDeleteById_fail() {
+
+		// Inicializacion
+		when(studentPersistencePort.findById(anyLong())).thenReturn(Optional.empty());
+
+		// Comprobaciones o aserciones
+		assertThrows(StudentNotFoundException.class, () -> {
+			studentService.deleteById(15L);
+		});
+		verify(studentPersistencePort, times(1)).findById(15L);
+		verify(studentPersistencePort, times(0)).deleteById(15L);
+		verify(externalCoursesOutputPort, times(0)).removeStudentFromCollection(15L);
+
 	}
 }
