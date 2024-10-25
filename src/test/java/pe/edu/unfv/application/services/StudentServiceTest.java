@@ -224,7 +224,6 @@ class StudentServiceTest {
 		// Comprobaciones o aserciones		
 		verify(studentPersistencePort, times(1)).findById(1L);
 		verify(externalCoursesOutputPort, times(1)).removeStudentFromCollection(1L);
-
 	}
 
 	@Test
@@ -240,6 +239,5 @@ class StudentServiceTest {
 		verify(studentPersistencePort, times(1)).findById(15L);
 		verify(studentPersistencePort, times(0)).deleteById(15L);
 		verify(externalCoursesOutputPort, times(0)).removeStudentFromCollection(15L);
-
 	}
 }
