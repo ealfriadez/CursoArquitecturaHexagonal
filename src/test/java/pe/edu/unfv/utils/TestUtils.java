@@ -1,8 +1,10 @@
 package pe.edu.unfv.utils;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import pe.edu.unfv.domain.models.Student;
+import pe.edu.unfv.infrastructure.adapters.input.rest.models.response.StudentResponse;
 import pe.edu.unfv.infrastructure.adapters.output.persistence.models.StudentEntity;
 
 public class TestUtils {
@@ -53,5 +55,17 @@ public class TestUtils {
 				new StudentEntity(4L, "Santiago", "Coqueto", 11, "santiago@gmail.com", "Clle. 4"),
 				new StudentEntity(5L, "Carlitos", "Suero", 5, "carlitos@gmail.com", "Clle. 5"),
 				new StudentEntity(6L, "Alfredito", "Chichicuarima", 8, "alfredito@gmail.com", "Clle. 6"));
+	}
+	
+	public static StudentResponse buildStudentResponse() {
+		return StudentResponse.builder()
+				.id(1L)
+				.firstName("Pepito")
+				.lastName("Dos Palotes")
+				.age(15)
+				.email("pepito@gmail.com")
+				.address("Clle. 1")
+				.timestamp(LocalDate.now().toString())
+				.build();
 	}
 }
