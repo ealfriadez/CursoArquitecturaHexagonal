@@ -17,3 +17,5 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+credential:
+  token: sqp_ee8f60667c9fbd26a6f36001e2167516aa830480

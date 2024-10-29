@@ -27,13 +27,13 @@ import pe.edu.unfv.infrastructure.adapters.input.rest.models.response.ErrorRespo
 @RestControllerAdvice
 public class GlobalControllerAdvice {
 
-	private final String ERROR_LOG_MESSAGE = "Error -> code: {}, type: {}, message: {}";
+	private static final String ERROR_MESSAGE = "Error -> code: {}, type: {}, message: {}";
 	
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(StudentNotFoundException.class)
 	public ErrorResponse handleStudentNotFoundException() {
 	
-		log.error(ERROR_LOG_MESSAGE, STUDENT_NOT_FOUND.getCode(), FUNCTIONAL, STUDENT_NOT_FOUND.getMessage());
+		log.error(ERROR_MESSAGE, STUDENT_NOT_FOUND.getCode(), FUNCTIONAL, STUDENT_NOT_FOUND.getMessage());
 		
 		return ErrorResponse.builder()
 				.code(STUDENT_NOT_FOUND.getCode())
@@ -48,7 +48,7 @@ public class GlobalControllerAdvice {
 	public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
 		BindingResult bindingResult = e.getBindingResult();
 		
-		log.error(ERROR_LOG_MESSAGE, STUDENT_BAD_PARAMETERS.getCode(), FUNCTIONAL, STUDENT_BAD_PARAMETERS.getMessage());
+		log.error(ERROR_MESSAGE, STUDENT_BAD_PARAMETERS.getCode(), FUNCTIONAL, STUDENT_BAD_PARAMETERS.getMessage());
 		
 		return ErrorResponse.builder()
 				.code(STUDENT_BAD_PARAMETERS.getCode())
@@ -66,7 +66,7 @@ public class GlobalControllerAdvice {
 	@ExceptionHandler(StudentEmailAlreadyExistsException.class)
 	public ErrorResponse handleStudentEmailAlreadyExistsException(StudentEmailAlreadyExistsException e) {
 		
-		log.error(ERROR_LOG_MESSAGE, STUDENT_EMAIL_ALREADY_EXISTS.getCode(), FUNCTIONAL, STUDENT_EMAIL_ALREADY_EXISTS.getMessage());
+		log.error(ERROR_MESSAGE, STUDENT_EMAIL_ALREADY_EXISTS.getCode(), FUNCTIONAL, STUDENT_EMAIL_ALREADY_EXISTS.getMessage());
 		
 		return ErrorResponse.builder()
 				.code(STUDENT_EMAIL_ALREADY_EXISTS.getCode())
@@ -81,7 +81,7 @@ public class GlobalControllerAdvice {
 	@ExceptionHandler(Exception.class)
 	public ErrorResponse handleException(Exception e) {
 		
-		log.error(ERROR_LOG_MESSAGE, INTERNAL_SERVER_ERROR.getCode(), SYSTEM, INTERNAL_SERVER_ERROR.getMessage());
+		log.error(ERROR_MESSAGE, INTERNAL_SERVER_ERROR.getCode(), SYSTEM, INTERNAL_SERVER_ERROR.getMessage());
 		
 		return ErrorResponse.builder()
 				.code(INTERNAL_SERVER_ERROR.getCode())
